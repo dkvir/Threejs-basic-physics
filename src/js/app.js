@@ -9,7 +9,6 @@ import { DoubleSide, EquirectangularRefractionMapping } from 'three';
 import { AnimationUtils } from 'three';
 
 const canvas = document.querySelector('.canvas');
-const timeStep = 1 / 60;
 let bgTexture, sphere, ground, box;
 
 //load manager
@@ -130,8 +129,15 @@ function addModel(){
   scene.add(sphere,ground, box);
 }
 
+const clock = new THREE.Clock();
+let oldElapsedTime = 0
+
 function animate() {
-  world.step(timeStep)
+  const elapsedTime = clock.getElapsedTime();
+  const deltaTime = elapsedTime - oldElapsedTime
+  oldElapsedTime = elapsedTime
+
+  world.step(1 / 60, deltaTime, 3)
   ground.position.copy(groundBody.position);
   ground.quaternion.copy(groundBody.quaternion)
 
